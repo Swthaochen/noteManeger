@@ -1,6 +1,5 @@
 
 var mysql = require('mysql');
-var sd = require('silly-datetime');
 var test = function(data){
     var db = mysql.createConnection({
         host:'127.0.0.1',
@@ -8,19 +7,19 @@ var test = function(data){
         password:'88888888',
         database:'node'
     });
-    var time=sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
-    time = Date.parse(new Date(time))
     return new Promise((resolve,reject)=>{
         db.connect(function(err){
             if(err){
                 reject("mysql连接失败，错误码是："+err.code)
             }else{
-                var sql = "SELECT * FROM notelist WHERE (? BETWEEN starttime AND endtime) AND userid=?";
-                db.query(sql,[time,data],function(err,result){
+                var sql = "INSERT INTO NOTELIST (userid,notetitle,noteCon,starttime,endtime,isFinish) VALUES (?,?,?,?,?,0)";
+                db.query(sql,[data.userid,data.notetitle,data.noteCon,data.starttime,data.endtime],function(err,result){
                     if(err){
                         reject(err)
                     }else{
-                        resolve(result)
+                        console.log(result)
+                        resolve(200)
+                        console.log('数据库操作成功！！');
                     }
                 })
             }
@@ -28,6 +27,6 @@ var test = function(data){
     });
 }
     
-exports.get = function(data){
-    return test(data.id)
+exports.update = function(data){
+    return test(data)
 }

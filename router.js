@@ -3,6 +3,9 @@ var getUser = require('./func/getUser.js');
 var up = require('./func/updateInfo.js');
 var getTime = require('./func/getTodayList.js');
 var config = require('./func/configFinish.js')
+var insert = require('./func/insertWork.js')
+var getW = require('./func/getWorkInfo.js')
+var getD = require('./func/getDateWork.js')
 
 exports.login = function (req,resp,next) {
     console.log(req.query.js_code)
@@ -23,14 +26,30 @@ exports.updateinfo = function(req,resp,next){
     resp.send('成功')
 };
 exports.getTodayList = function(req,resp,next){
-    getTime.get().then((res)=>{
+    getTime.get(req.query).then((res)=>{
         console.log(res)
         resp.send(res)
     })
 };
 exports.configThis = function(req,resp,next){
-    console.log(req.query)
     config.get(req.query).then((res)=>{
+        resp.send(res)
+    })
+}
+exports.insertWork = function(req,resp,next){
+    insert.update(req.query).then((res)=>{
+        resp.send(res)
+    })
+}
+exports.getWorkInfo = function(req,resp,next){
+    getW.get(req.query).then((res)=>{
+        console.log(res)
+        resp.send(res)
+    })
+}
+exports.getDateWork = function(req,resp,next){
+    getD.get(req.query).then((res)=>{
+        console.log(res)
         resp.send(res)
     })
 }
